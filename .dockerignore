@@ -1,0 +1,3 @@
+# I also recommend adding .venv to your .dockerignore
+# If not, when you copy your files the .venv folder will be overwritten in the docker image and re-installations will happen.
+.venv
