@@ -1,29 +1,40 @@
-from langchain_openai import OpenAI
-from langchain.prompts import PromptTemplate
+import argparse
+import os
+
+from dotenv import load_dotenv
 from langchain.chains import LLMChain
+from langchain.prompts import PromptTemplate
+from langchain_openai import OpenAI
 
-# SECURE THIS KEY!
-# api_key = ""
+load_dotenv()
 
-# llm = OpenAI(
-#     openai_api_key=api_key
-# )
+parser = argparse.ArgumentParser()
+parser.add_argument("--task", default="return a list of numbers")
+parser.add_argument("--language", default="python")
+args = parser.parse_args()
 
-# code_prompt = PromptTemplate(
-#     template="Write a very short {language} function that will {task}",
-#     input_variables=["language", "task"]
-# )
+# parsing env manually for practice, but library will look for "OPENAPI_API_KEY" in env
+llm = OpenAI(
+  openai_api_key=os.getenv("OPENAPI_API_KEY"),
+)
 
-# code_chain = LLMChain(
-#     llm=llm,
-#     prompt=code_prompt
-# )
+code_prompt = PromptTemplate(
+  template="Write a very short {language} function that will {task}",
+  input_variables=["language", "task"],
+)
 
-# result = code_chain({
-#     "language": "python",
-#     "task": "return a list of numbers"
-# })
+code_chain = LLMChain(
+  llm=llm,
+  prompt=code_prompt,
+)
 
-# print(result["text"])
+result = code_chain(
+  {
+    "language": args.language,
+    "task": args.task,
+  }
+)
 
-print("test")
+print(result["text"])
+
+# print("test")
